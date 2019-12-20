@@ -41,7 +41,7 @@ public class TeamController {
     }
 
     @PutMapping(path = "/team/{id}")
-    public ResponseEntity<String> createTeam(@PathVariable("id") String id, @RequestBody Team team) {
+    public ResponseEntity<String> updateTeam(@PathVariable("id") String id, @RequestBody Team team) {
         return ResponseEntity.ok(teamService.updateTeam(id, team));
 
     }
