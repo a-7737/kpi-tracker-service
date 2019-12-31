@@ -11,9 +11,6 @@ import java.util.Optional;
 @Service
 public class TeamService {
 
-    private static final String OPERTION_SUCCESSFUL = "Operation successful!";
-    private static final String OPERTION_UNSUCCESSFUL = "Operation Unsuccessful!";
-
     @Autowired
     private TeamRepository teamRepository;
 
@@ -32,12 +29,12 @@ public class TeamService {
     public String updateTeam(String id, Team team) {
         Optional<Team> existingTeam = getTeam(id);
         if (existingTeam.isEmpty()) {
-            return OPERTION_UNSUCCESSFUL;
+            return Events.getMessage(Events.OPERATION_FAILED);
         } else {
             Team updatedTeam = existingTeam.get();
             updatedTeam.setName(team.getName());
             teamRepository.save(updatedTeam);
-            return OPERTION_SUCCESSFUL;
+            return Events.getMessage(Events.OPERATION_SUCCESSFUL);
         }
     }
 
@@ -45,10 +42,10 @@ public class TeamService {
         Optional<Team> team = getTeam(id);
 
         if (team.isEmpty()) {
-            return OPERTION_UNSUCCESSFUL;
+            return Events.getMessage(Events.OPERATION_FAILED);
         } else {
             teamRepository.delete(team.get());
-            return OPERTION_SUCCESSFUL;
+            return Events.getMessage(Events.OPERATION_SUCCESSFUL);
         }
     }
 }
