@@ -31,19 +31,16 @@ public class TeamController {
     @GetMapping(path = "/team")
     public ResponseEntity<List<Team>> getAllTeams() {
         return ResponseEntity.ok(teamService.getAllTeams());
-
     }
 
     @PostMapping(path = "/team")
     public ResponseEntity<Team> createTeam(@RequestBody Team team) {
         return ResponseEntity.ok(teamService.addTeam(team));
-
     }
 
     @PutMapping(path = "/team/{id}")
     public ResponseEntity<String> updateTeam(@PathVariable("id") String id, @RequestBody Team team) {
         return ResponseEntity.ok(teamService.updateTeam(id, team));
-
     }
 
     @DeleteMapping(path = "/team/{id}")
