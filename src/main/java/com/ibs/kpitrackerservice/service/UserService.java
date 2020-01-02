@@ -13,7 +13,6 @@ import java.util.Optional;
 
 @Service
 public class UserService {
-;
     private static final Logger LOGGER = LoggerFactory.getLogger(UserService.class);
 
     @Autowired
@@ -29,7 +28,7 @@ public class UserService {
     public User getUserByName(String name) {
         try {
             Optional<User> user = userRepository.findByEmployeeName(name);
-            if (!user.isEmpty() && user.isPresent()) {
+            if (user.isPresent()) {
                 LOGGER.info(Events.OPERATION_SUCCESSFUL.toString());
                 return user.get();
             }
@@ -46,7 +45,7 @@ public class UserService {
     public User getUserById(String id) {
         try {
             Optional<User> user = userRepository.findById(id);
-            if (!user.isEmpty() && user.isPresent()) {
+            if (user.isPresent()) {
                 LOGGER.info(Events.OPERATION_SUCCESSFUL.toString());
                 return user.get();
             }
@@ -60,7 +59,7 @@ public class UserService {
         return null;
     }
 
-    public String saveUser(User user) {
+    public String createUser(User user) {
         try {
             user.setTeam(teamRepository.findByName(user.getTeam().getName()).get());
             userRepository.save(user);
@@ -75,7 +74,7 @@ public class UserService {
     public String updateUser(User user) {
         try {
             Optional<User> existingUser = userRepository.findById(user.getId());
-            if (!existingUser.isEmpty() && existingUser.isPresent()) {
+            if (existingUser.isPresent()) {
                 userRepository.delete(existingUser.get());
                 userRepository.save(user);
                 return Events.getMessage(Events.OPERATION_SUCCESSFUL);
@@ -93,7 +92,7 @@ public class UserService {
     public String deleteUser(String id) {
         try {
             Optional<User> existingUser = userRepository.findById(id);
-            if (!existingUser.isEmpty() && existingUser.isPresent()) {
+            if (existingUser.isPresent()) {
                 userRepository.delete(existingUser.get());
                 return Events.getMessage(Events.OPERATION_SUCCESSFUL);
             }
