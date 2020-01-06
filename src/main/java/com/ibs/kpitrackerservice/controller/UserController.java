@@ -30,7 +30,7 @@ public class UserController {
         return ResponseEntity.ok(userService.createUser(user));
     }
 
-    @PutMapping(path = "/user/update")
+    @PutMapping(path = "/user")
     public ResponseEntity<String> updateUser(@RequestBody User user) {
         return ResponseEntity.ok(userService.updateUser(user));
     }
