@@ -20,8 +20,14 @@ public class TeamService {
     @Autowired
     private TeamRepository teamRepository;
 
-    public Optional<Team> getTeam(String id) {
-        return teamRepository.findById(id);
+    public Team getTeam(String id) {
+        final Optional<Team> existingTeam = teamRepository.findById(id);
+        if (existingTeam.isEmpty()) {
+            LOGGER.warn(Events.TEAM_NOT_FOUND.toString());
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, Events.getMessage(Events.TEAM_NOT_FOUND));
+        } else {
+            return existingTeam.get();
+        }
     }
 
     public List<Team> getAllTeams() {
@@ -33,29 +39,16 @@ public class TeamService {
     }
 
     public String updateTeam(String id, Team team) {
-        final Optional<Team> existingTeam = getTeam(id);
-        if (existingTeam.isEmpty()) {
-            LOGGER.warn(Events.TEAM_NOT_FOUND.toString());
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, Events.TEAM_NOT_FOUND.toString());
-        } else {
-            Team updatedTeam = existingTeam.get();
-            updatedTeam.setName(team.getName());
-            teamRepository.save(updatedTeam);
-            LOGGER.info(Events.OPERATION_SUCCESSFUL.toString());
-            return Events.getMessage(Events.OPERATION_SUCCESSFUL);
-        }
+        final Team updatedTeam = getTeam(id);
+        updatedTeam.setName(team.getName());
+        teamRepository.save(updatedTeam);
+        LOGGER.info(Events.OPERATION_SUCCESSFUL.toString());
+        return Events.getMessage(Events.OPERATION_SUCCESSFUL);
     }
 
     public String deleteTeam(String id) {
-        final Optional<Team> team = getTeam(id);
-
-        if (team.isEmpty()) {
-            LOGGER.warn(Events.TEAM_NOT_FOUND.toString());
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, Events.TEAM_NOT_FOUND.toString());
-        } else {
-            teamRepository.delete(team.get());
-            LOGGER.info(Events.OPERATION_SUCCESSFUL.toString());
-            return Events.getMessage(Events.OPERATION_SUCCESSFUL);
-        }
+        teamRepository.delete(getTeam(id));
+        LOGGER.info(Events.OPERATION_SUCCESSFUL.toString());
+        return Events.getMessage(Events.OPERATION_SUCCESSFUL);
     }
 }
