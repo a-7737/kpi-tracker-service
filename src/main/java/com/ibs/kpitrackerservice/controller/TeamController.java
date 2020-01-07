@@ -25,7 +25,7 @@ public class TeamController {
 
     @GetMapping(path = "/team/{id}")
     public ResponseEntity<Team> getTeam(@PathVariable("id") String id) {
-        return ResponseEntity.ok(teamService.getTeam(id).get());
+        return ResponseEntity.ok(teamService.getTeam(id));
     }
 
     @GetMapping(path = "/team")
