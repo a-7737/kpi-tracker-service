@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
+import com.ibs.kpitrackerservice.service.Events.Error;
 
 import java.util.List;
 
@@ -23,8 +24,8 @@ public class TeamService {
     public Team getTeam(String id) {
         final var existingTeam = teamRepository.findById(id);
         if (existingTeam.isEmpty()) {
-            LOGGER.warn(Events.getMessage(Events.TEAM_NOT_FOUND));
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, Events.getMessage(Events.TEAM_NOT_FOUND));
+            LOGGER.warn(Error.TEAM_NOT_FOUND.toString());
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, Error.getMessage(Error.TEAM_NOT_FOUND));
         } else {
             return existingTeam.get();
         }

@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
+import com.ibs.kpitrackerservice.service.Events.Error;
 
 import java.util.List;
 
@@ -22,8 +23,8 @@ public class KpiService {
     public Kpi getKpi(String id) {
         final var existingKpi = kpiRepository.findById(id);
         if (existingKpi.isEmpty()) {
-            LOGGER.warn(Events.getMessage(Events.KPI_NOT_FOUND));
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, Events.getMessage(Events.KPI_NOT_FOUND));
+            LOGGER.warn(Error.getMessage(Error.KPI_NOT_FOUND));
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, Error.getMessage(Error.KPI_NOT_FOUND));
         } else {
             return existingKpi.get();
         }

@@ -11,16 +11,19 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
 
 @RestController
+@RequestMapping(path = "/kpi")
 public class UserController {
 
     @Autowired
     private UserService userService;
 
-    @GetMapping(path = "/user")
+    @GetMapping(path = "/users")
     public ResponseEntity<List<User>> getAllUsers() {
         return ResponseEntity.ok(userService.getAllUsers());
     }
@@ -43,6 +46,11 @@ public class UserController {
     @GetMapping(path = "/user/{name}")
     public ResponseEntity<User> getByName(@PathVariable("name") String name) {
         return ResponseEntity.ok(userService.getUserByName(name));
+    }
+
+    @GetMapping(path = "/user")
+    public ResponseEntity<User> getByUsernameAndPassword(@RequestParam("username") String username, @RequestParam("password") String password) {
+        return ResponseEntity.ok(userService.getUser(username, password));
     }
 
     @GetMapping(path = "/user/{id}")
