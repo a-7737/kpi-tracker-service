@@ -38,9 +38,9 @@ public class TeamController {
         return ResponseEntity.ok(teamService.addTeam(team));
     }
 
-    @PutMapping(path = "/team/{id}")
-    public ResponseEntity<String> updateTeam(@PathVariable("id") String id, @RequestBody Team team) {
-        return ResponseEntity.ok(teamService.updateTeam(id, team));
+    @PutMapping(path = "/team")
+    public ResponseEntity<String> updateTeam(@RequestBody Team team) {
+        return ResponseEntity.ok(teamService.updateTeam(team));
     }
 
     @DeleteMapping(path = "/team/{id}")
