@@ -8,7 +8,8 @@ public enum Events {
     USER_DELETE_EXCEPTION(105, "Exception occurred while trying to delete an existing user"),
     USER_EXCEPTION(105, "Exception occurred while trying to fetch an existing user"),
     NOT_FOUND(106, "Couldn't able to find the User"),
-    TEAM_NOT_FOUND(107, "Team not found")
+    TEAM_NOT_FOUND(107, "Team not found"),
+    KPI_NOT_FOUND(108, "Kpi not found")
     ;
 
     private final Integer errorCode;
