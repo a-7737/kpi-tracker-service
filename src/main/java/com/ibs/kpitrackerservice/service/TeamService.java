@@ -2,6 +2,7 @@ package com.ibs.kpitrackerservice.service;
 
 import com.ibs.kpitrackerservice.model.Team;
 import com.ibs.kpitrackerservice.respository.TeamRepository;
+import org.bson.types.ObjectId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +11,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class TeamService {
@@ -21,9 +21,9 @@ public class TeamService {
     private TeamRepository teamRepository;
 
     public Team getTeam(String id) {
-        final Optional<Team> existingTeam = teamRepository.findById(id);
+        final var existingTeam = teamRepository.findById(id);
         if (existingTeam.isEmpty()) {
-            LOGGER.warn(Events.TEAM_NOT_FOUND.toString());
+            LOGGER.warn(Events.getMessage(Events.TEAM_NOT_FOUND));
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, Events.getMessage(Events.TEAM_NOT_FOUND));
         } else {
             return existingTeam.get();
@@ -38,17 +38,17 @@ public class TeamService {
         return teamRepository.insert(team);
     }
 
-    public String updateTeam(String id, Team team) {
-        final Team updatedTeam = getTeam(id);
-        updatedTeam.setName(team.getName());
+    public String updateTeam(Team updatedTeam) {
+        final var existingTeam = getTeam(updatedTeam.getId());
+        updatedTeam.setId(new ObjectId(existingTeam.getId()));
         teamRepository.save(updatedTeam);
-        LOGGER.info(Events.OPERATION_SUCCESSFUL.toString());
+        LOGGER.info(Events.getMessage(Events.OPERATION_SUCCESSFUL));
         return Events.getMessage(Events.OPERATION_SUCCESSFUL);
     }
 
     public String deleteTeam(String id) {
         teamRepository.delete(getTeam(id));
-        LOGGER.info(Events.OPERATION_SUCCESSFUL.toString());
+        LOGGER.info(Events.getMessage(Events.OPERATION_SUCCESSFUL));
         return Events.getMessage(Events.OPERATION_SUCCESSFUL);
     }
 }
