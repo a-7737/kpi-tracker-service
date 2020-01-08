@@ -2,13 +2,15 @@ package com.ibs.kpitrackerservice.service;
 
 import com.ibs.kpitrackerservice.model.Kpi;
 import com.ibs.kpitrackerservice.respository.KpiRepository;
+import org.bson.types.ObjectId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class KpiService {
@@ -18,10 +20,10 @@ public class KpiService {
     private KpiRepository kpiRepository;
 
     public Kpi getKpi(String id) {
-        Optional<Kpi> existingKpi = kpiRepository.findById(id);
+        final var existingKpi = kpiRepository.findById(id);
         if (existingKpi.isEmpty()) {
-            LOGGER.info(Events.OPERATION_FAILED.toString());
-            return null;
+            LOGGER.warn(Events.getMessage(Events.KPI_NOT_FOUND));
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, Events.getMessage(Events.KPI_NOT_FOUND));
         } else {
             return existingKpi.get();
         }
@@ -35,24 +37,15 @@ public class KpiService {
         return kpiRepository.insert(kpi);
     }
 
-    public String updateKpi(String id, Kpi kpi) {
-        Kpi existingKpi = getKpi(id);
-        if(existingKpi != null){
-            existingKpi.setKpi(kpi.getKpi());
-            existingKpi.setKpiParams(kpi.getKpiParams());
-            kpiRepository.save(existingKpi);
-            return Events.getMessage(Events.OPERATION_SUCCESSFUL);
-        }
-        return Events.getMessage(Events.OPERATION_FAILED);
+    public String updateKpi(Kpi updatedKpi) {
+        final var existingKpi = getKpi(updatedKpi.getId());
+        updatedKpi.setId(new ObjectId(existingKpi.getId()));
+        kpiRepository.save(updatedKpi);
+        return Events.getMessage(Events.OPERATION_SUCCESSFUL);
     }
 
     public String deleteKpi(String id) {
-        Kpi kpi = getKpi(id);
-
-        if (kpi != null) {
-            kpiRepository.delete(kpi);
-            return Events.getMessage(Events.OPERATION_SUCCESSFUL);
-        }
-        return Events.getMessage(Events.OPERATION_FAILED);
+        kpiRepository.delete(getKpi(id));
+        return Events.getMessage(Events.OPERATION_SUCCESSFUL);
     }
 }
