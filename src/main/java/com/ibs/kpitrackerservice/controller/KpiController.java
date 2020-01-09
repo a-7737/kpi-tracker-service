@@ -21,30 +21,30 @@ public class KpiController {
     @Autowired
     private KpiService kpiService;
 
-    @GetMapping(path = "/{id}")
+    @GetMapping(path = "/kpi/{id}")
     public ResponseEntity<Kpi> getKpi(@PathVariable("id") String id) {
         return ResponseEntity.ok(kpiService.getKpi(id));
     }
 
-    @GetMapping
+    @GetMapping(path = "/kpi")
     public ResponseEntity<List<Kpi>> getAllKpis() {
         return ResponseEntity.ok(kpiService.getAllKpis());
 
     }
 
-    @PostMapping
+    @PostMapping(path = "/kpi")
     public ResponseEntity<Kpi> addKpi(@RequestBody Kpi kpi) {
         return ResponseEntity.ok(kpiService.addKpi(kpi));
 
     }
 
-    @PutMapping
+    @PutMapping(path = "/kpi")
     public ResponseEntity<String> updateKpi(@RequestBody Kpi kpi) {
         return ResponseEntity.ok(kpiService.updateKpi(kpi));
 
     }
 
-    @DeleteMapping(path = "/{id}")
+    @DeleteMapping(path = "/kpi/{id}")
     public ResponseEntity<String> deleteKpi(@PathVariable("id") String id) {
         return ResponseEntity.ok(kpiService.deleteKpi(id));
     }
